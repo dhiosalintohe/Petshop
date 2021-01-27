@@ -17,10 +17,11 @@ import javax.swing.JOptionPane;
  * @author Dhio Salintohe
  */
 public class dtBrg extends javax.swing.JFrame {
+    String sNama;
 private Connection conn = new koneksi().Koneksi();
     private DefaultTableModel tabmode;
     protected void datatable(){
-        Object[] Baris ={"Kode Barang","Nama Barang","Harga Barang"};
+        Object[] Baris ={"Kode Barang","Nama Barang","Harga Barang","Jumlah Barang","Total"};
         tabmode = new DefaultTableModel(null, Baris);
         jTable1.setModel(tabmode);
         String sql= "select * from dtbarang";
@@ -31,8 +32,9 @@ private Connection conn = new koneksi().Koneksi();
             String kode=hasil.getString("kode");
             String nama=hasil.getString("nmbrg");
             String hrga=hasil.getString("harga");
-           
-            String[] data={kode,nama,hrga};
+            String jumlh=hasil.getString("jumlh");
+            String total=hasil.getString("total");
+            String[] data={kode,nama,hrga,jumlh,total};
             tabmode.addRow(data);
     }
     } catch (Exception e) {
@@ -48,30 +50,37 @@ private Connection conn = new koneksi().Koneksi();
     public void refreshform (){
          datatable();
         txtkode.setText("");
-        txtnma.setText("");
+         txtnma.setText("");
         txthrga.setText("");
+        txtjmlh.setText("");
+        txttotal.setText("");
+        
         txtkode.setEnabled(false);
         txtnma.setEnabled(false);
         txthrga.setEnabled(false);
+        txtjmlh.setEnabled(false);
+        txttotal.setEnabled(false);
         btnsimpan.setEnabled(false);
         btnedit.setEnabled(false);
         btnbatal.setEnabled(false);
         btnhapus.setEnabled(false);
         btntambah.setEnabled(true);
+        btnsimpan.setText("Simpan");
        
     }
     
     private void clearform(){
-        txtkode.setText("");
-        txtnma.setText("");
-        txthrga.setText("");
-        txtkode.setEnabled(true);
+        txtjmlh.setEnabled(true);
+        txttotal.setEnabled(true);
+        txtkode.setEnabled(false);
         txtnma.setEnabled(true);
         txthrga.setEnabled(true);
+        txtjmlh.setEnabled(true);
         btnsimpan.setEnabled(true);
         btnedit.setEnabled(false);
         btnbatal.setEnabled(true);
-        btnsimpan.setText("Simpan");
+        
+       
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -97,6 +106,10 @@ private Connection conn = new koneksi().Koneksi();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         btnhapus = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtjmlh = new javax.swing.JTextField();
+        txttotal = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -106,7 +119,7 @@ private Connection conn = new koneksi().Koneksi();
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Data Barang");
+        jLabel1.setText("Transaksi Barang");
 
         jLabel2.setText("Kode Barang");
 
@@ -180,6 +193,46 @@ private Connection conn = new koneksi().Koneksi();
             }
         });
 
+        jLabel5.setText("Jumlah");
+
+        jLabel6.setText("Total");
+
+        txtjmlh.setText("jTextField1");
+        txtjmlh.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                txtjmlhMouseWheelMoved(evt);
+            }
+        });
+        txtjmlh.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtjmlhMouseClicked(evt);
+            }
+        });
+        txtjmlh.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txtjmlhInputMethodTextChanged(evt);
+            }
+        });
+        txtjmlh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtjmlhActionPerformed(evt);
+            }
+        });
+        txtjmlh.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtjmlhKeyPressed(evt);
+            }
+        });
+
+        txttotal.setText("jTextField1");
+        txttotal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txttotalMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -187,37 +240,39 @@ private Connection conn = new koneksi().Koneksi();
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(241, 241, 241)
-                        .addComponent(jLabel1))
+                        .addComponent(btntambah, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnedit, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(btnhapus, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnkeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(64, 64, 64)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4))
-                                .addGap(51, 51, 51)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtkode)
-                                    .addComponent(txtnma)
-                                    .addComponent(txthrga, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(btntambah, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnedit, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(47, 47, 47)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnhapus, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnkeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtkode)
+                            .addComponent(txtnma)
+                            .addComponent(txthrga, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                            .addComponent(txttotal)
+                            .addComponent(txtjmlh))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(286, 286, 286)
+                .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -225,9 +280,9 @@ private Connection conn = new koneksi().Koneksi();
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(txtkode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -239,28 +294,61 @@ private Connection conn = new koneksi().Koneksi();
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(txthrga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btntambah)
-                            .addComponent(btnsimpan)
-                            .addComponent(btnedit)
-                            .addComponent(btnbatal)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtjmlh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(txttotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btntambah)
+                    .addComponent(btnsimpan)
+                    .addComponent(btnedit)
+                    .addComponent(btnbatal)
                     .addComponent(btnhapus)
                     .addComponent(btnkeluar))
-                .addContainerGap(263, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btntambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntambahActionPerformed
-        clearform();
+         
+        try {
+            String str="SELECT * FROM dtbarang";
+             PreparedStatement st = conn.prepareStatement(str);
+            String sql = "SELECT * FROM dtbarang ORDER BY kode DESC";
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) {
+                String kode = rs.getString("kode").substring(2);
+                String AN = "" + (Integer.parseInt(kode)+1);
+                String Nol = "";
+
+                if(AN.length()==1)
+                    {Nol = "000";}
+                else if(AN.length()==2)
+                    {Nol = "00";}
+                else if(AN.length()==3)
+                    {Nol = "0";}
+                else if(AN.length()==4)
+                    {Nol = "";}
+                txtkode.setText("Ps" + Nol + AN);//sesuaikan dengan variable namenya
+            } else {
+                txtkode.setText("Ps0001");//sesuaikan dengan variable namenya
+            }
+            rs.close();
+          
+        } catch (Exception e) {
+            e.printStackTrace();//penanganan masalah
+        }
+        
         btntambah.setEnabled(false);
+        clearform();
         
                 // TODO add your handling code here:
     }//GEN-LAST:event_btntambahActionPerformed
@@ -272,29 +360,52 @@ private Connection conn = new koneksi().Koneksi();
 
     private void btnsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsimpanActionPerformed
         double hrg = Double.parseDouble(txthrga.getText());
+        int jmlh = Integer.parseInt(txtjmlh.getText());
         String kd = txtkode.getText();
         String n = txtnma.getText();
-        String sql="insert into dtbarang values(?,?,?)";
-        if (btnsimpan.getText().equals("Simpan")){
-                sql="insert into dtbarang values(?,?,?)";}
+        String sql="insert into dtbarang values(?,?,?,?,?)";
+        String str="SELECT * from dtbarang ";
+        
+        if (btnsimpan.getText().equals("Update")){
+             sql="update dtbarang SET kode=?,nmbrg=?, harga=?, jumlh=?, total=? WHERE kode='"+jTable1.getValueAt(jTable1.getSelectedRow(), 0)+"'";
+            try{
+                PreparedStatement stat = conn.prepareStatement(sql);
+                stat.setString(1, new kdbrg(kd).getkd());
+                stat.setString(2, new nmbrg(n).getnm());
+                stat.setString(3, txthrga.getText());
+                stat.setString(4, txtjmlh.getText());
+                stat.setString(5, txttotal.getText());
+                stat.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Berhasil DiUpdate");
+            btnsimpan.setEnabled(false);
+            } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Data Berhasil Diupdate"+e);
+            }  }
+        
         else {  
-            sql="update dtbarang SET kode=?,nmbrg=?, harga=? WHERE kode='"+jTable1.getValueAt(jTable1.getSelectedRow(), 0)+"'";
-        }
-        try{
-        PreparedStatement stat = conn.prepareStatement(sql);
-        stat.setString(1, new kdbrg(kd).getkd());
-        stat.setString(2, new nmbrg(n).getnm());
-        stat.setString(3, txthrga.getText());
-        stat.executeUpdate();
-        JOptionPane.showMessageDialog(null, "Berhasil Simpan");
-        btnsimpan.setEnabled(false);
+            sql="insert into dtbarang values(?,?,?,?,?)"; 
+            
+            try{
+            
+            PreparedStatement stat = conn.prepareStatement(sql);
+            stat.setString(1, new kdbrg(kd).getkd());
+            stat.setString(2, new nmbrg(n).getnm());
+            stat.setString(3, txthrga.getText());
+            stat.setString(4, txtjmlh.getText());
+            stat.setString(5, txttotal.getText());
+            stat.executeUpdate();
+                        
+            btnsimpan.setEnabled(false);
     } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan"+e);
-        }                // TODO add your handling code here:
+        }  
+        }
+                   // TODO add your handling code here:
     refreshform();
     }//GEN-LAST:event_btnsimpanActionPerformed
 
     private void btneditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditActionPerformed
+        clearform();
         btnsimpan.setText("Update");
         btnedit.setEnabled(false);
         // TODO add your handling code here:
@@ -305,18 +416,21 @@ private Connection conn = new koneksi().Koneksi();
     }//GEN-LAST:event_btnbatalActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        txtkode.setEnabled(true);
-        txtnma.setEnabled(true);
-        txthrga.setEnabled(true);
-        btnsimpan.setEnabled(true);
+        txtkode.setEnabled(false);
+        txtnma.setEnabled(false);
+        txthrga.setEnabled(false);
+        btnsimpan.setEnabled(false);
         btntambah.setEnabled(false);
         btnbatal.setEnabled(true);
         btnedit.setEnabled(true);
         btnhapus.setEnabled(true);
         
+        sNama=(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 1)));
         txtkode.setText(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
         txtnma.setText(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 1))); 
         txthrga.setText(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 2)));
+        txtjmlh.setText(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 3)));
+        txttotal.setText(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 4)));
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btnhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnhapusActionPerformed
@@ -341,6 +455,43 @@ private Connection conn = new koneksi().Koneksi();
     private void btnkeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnkeluarActionPerformed
         System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_btnkeluarActionPerformed
+
+    private void txtjmlhInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtjmlhInputMethodTextChanged
+  
+    // TODO add your handling code here:
+    }//GEN-LAST:event_txtjmlhInputMethodTextChanged
+
+    private void txtjmlhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtjmlhActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtjmlhActionPerformed
+
+    private void txtjmlhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtjmlhKeyPressed
+        
+    }//GEN-LAST:event_txtjmlhKeyPressed
+
+    private void txtjmlhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtjmlhMouseClicked
+        
+        
+            // TODO add your handling code here:
+    }//GEN-LAST:event_txtjmlhMouseClicked
+
+    private void txtjmlhMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_txtjmlhMouseWheelMoved
+       int jmlh = Integer.parseInt(txtjmlh.getText());
+        double hrg = Double.parseDouble(txthrga.getText());
+        double total;
+        
+        total = jmlh * hrg;
+        txttotal.setText(String.valueOf(total)); // TODO add your handling code here:
+    }//GEN-LAST:event_txtjmlhMouseWheelMoved
+
+    private void txttotalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txttotalMouseClicked
+       int jmlh = Integer.parseInt(txtjmlh.getText());
+        double hrg = Double.parseDouble(txthrga.getText());
+        double total;
+        
+        total = jmlh * hrg;
+        txttotal.setText(String.valueOf(total)); // TODO add your handling code here:
+    }//GEN-LAST:event_txttotalMouseClicked
 
     /**
      * @param args the command line arguments
@@ -388,10 +539,14 @@ private Connection conn = new koneksi().Koneksi();
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txthrga;
+    private javax.swing.JTextField txtjmlh;
     private javax.swing.JTextField txtkode;
     private javax.swing.JTextField txtnma;
+    private javax.swing.JTextField txttotal;
     // End of variables declaration//GEN-END:variables
 }
